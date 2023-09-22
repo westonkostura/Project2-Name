@@ -1,13 +1,10 @@
-const { Map, DataTypes } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 
 const sequelize = require('../config/connection');
 
-class Marker extends Map {
-    
-    }
 
 
-Marker.init(
+Map.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -15,23 +12,14 @@ Marker.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        content: {
+        map_name: {
             type: DataTypes.STRING,
             allowNUll: false,
         },
-        image: {
-            type: DataTypes.STRING,
-            allowNUll: false,
-            
-        },
-        Marker: {
+        Markers: {
             type: DataTypes.STRING,
             allowNUll: false,
         },
-        map_id: {
-            type: DataTypes.STRING,
-            allowNull: false
-        }
     },
     {
         sequelize,
@@ -41,5 +29,4 @@ Marker.init(
         modelName: 'marker',
     }
 );
-module.exports = Marker;
-
+module.exports = Map;

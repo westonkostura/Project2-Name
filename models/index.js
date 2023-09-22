@@ -1,6 +1,6 @@
 const User = require('./User');
-
 const Marker = require('./Marker');
+const Map = require('./Map');
 
 User.hasMany(Marker, {
     foreignKey: 'user_id',
@@ -8,7 +8,11 @@ User.hasMany(Marker, {
 });
 
 Marker.belongsTo(User, {
-    foreignKey: 'userid'
+    foreignKey: 'marker_id'
 });
 
-module.exports = { User, Marker }
+Map.belongsTo(User, {
+    foreignKey: 'map_id'
+})
+
+module.exports = { User, Marker, Map }
