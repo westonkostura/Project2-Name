@@ -9,12 +9,10 @@
   <div class="flex-column justify-space-around">
     <header class="display-flex justify-space-between align-center p-2">
       <h1>
-        {{!-- change imhge --}}
-        <span role="img" aria-label="money">💸</span>
+        <span role="img" aria-label="pin">📍</span>
         <a href="/">Pin It!</a>
       </h1>
       <nav>
-        <!-- Conditionally render login or logout links -->
         {{#if logged_in}}
         <a href="/dashboard">profile</a> |
         <button class="no-button" id="logout">logout</button>
@@ -24,7 +22,6 @@
       </nav>
     </header>
     <main class="container container-fluid mt-5">
-      <!-- Render the sub layout -->
       {{{ body }}}
     </main>
     <footer>
