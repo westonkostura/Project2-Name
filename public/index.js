@@ -1,4 +1,5 @@
 let map;
+let markers = [];
 
 async function initMap() {
   const { Map } = await google.maps.importLibrary("maps");
@@ -8,47 +9,26 @@ async function initMap() {
     zoom: 6,
     mapTypeControl: false,
     streetViewControl: false,
-    fullscreenControl: false
-
-    
+    fullscreenControl: false,
   });
 
-  // A marker with a with a URL pointing to a PNG.
-const beachFlagImg = document.createElement("img");
+  google.maps.event.addListener(map, "click", function (event) {
+    placeMarker(map, event.latLng);
+  });
 
-beachFlagImg.src =
-  "./pics/forest.jpeg";
-
-const beachFlagMarkerView = new AdvancedMarkerElement({
-  map,
-  position: { lat: 37.434, lng: -122.082 },
-  content: beachFlagImg,
-  title: "A marker using a custom PNG Image",
-});
-//end marker example
-
-function createMarker(map, position, title) {
-  class Marker {
-    constructor() {
-      this.marker = new google.maps.Marker({
-        position: position,
+  function placeMarker(map, location) {
+    if (!marker) {
+      var marker = new google.maps.Marker({
+        id: "new",
+        position: location,
         map: map,
-        title: title
       });
-    }
-
-    // Add any additional methods or properties to the Marker class here
-
-    // Example method to set the marker position
-    setPosition(newPosition) {
-      this.marker.setPosition(newPosition);
+      var infowindow = new google.maps.InfoWindow({
+        icon: './pics/forest.jpeg',
+      });
+      infowindow.open(map, marker);
     }
   }
-
-  return new Marker();
 }
 
-}
- 
-  
 initMap();
