@@ -17,13 +17,19 @@ async function initMap() {
 const beachFlagImg = document.createElement("img");
 
 beachFlagImg.src =
-  "./pics/forest.jpeg";
+  "pics/forest.jpeg";
 
-const beachFlagMarkerView = new AdvancedMarkerElement({
+const beachFlagMarkerView = new google.maps.Marker({
   map,
   position: { lat: 37.434, lng: -122.082 },
-  content: beachFlagImg,
   title: "A marker using a custom PNG Image",
+  draggable: true,
+  icon: {
+    url: "pics/forest.jpeg",
+    // size: new google.maps.Size(20,32)
+
+  },
+
 });
 //end marker example
 
@@ -46,7 +52,12 @@ function createMarker(map, position, title) {
   }
 
   return new Marker();
-}
+};
+
+//addListener to pop up new pin window to upload pciture to pin
+map.addListener('click', function() {
+
+})
 
 }
  
