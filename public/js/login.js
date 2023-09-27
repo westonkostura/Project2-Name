@@ -1,3 +1,5 @@
+console.log('successful login');
+
 const loginFormHandler = async (event) => {
     event.preventDefault();
   
@@ -12,7 +14,7 @@ const loginFormHandler = async (event) => {
       });
   
       if (response.ok) {
-        document.location.replace('/profile');
+        document.location.replace('/dashboard');
       } else {
         alert(response.statusText);
       }
@@ -34,7 +36,7 @@ const loginFormHandler = async (event) => {
       });
   
       if (response.ok) {
-        document.location.replace('/profile');
+        document.location.replace('/dashboard');
       } else {
         alert(response.statusText);
       }
@@ -46,6 +48,6 @@ const loginFormHandler = async (event) => {
     .addEventListener('submit', loginFormHandler);
   
   document
-    .querySelector('.signup-form')
+    .querySelector('#registration')
     .addEventListener('submit', signupFormHandler);
   
