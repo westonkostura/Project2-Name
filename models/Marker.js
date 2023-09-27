@@ -22,9 +22,9 @@ Marker.init(
             allowNUll: false,
             
         },
-        Marker: {
+        location: {
             type: DataTypes.STRING,
-            allowNUll: false,
+            allowNull: false,
         },
         map_id: {
             type: DataTypes.STRING,
