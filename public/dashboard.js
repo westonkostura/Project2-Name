@@ -1,6 +1,7 @@
 const markerDiv = document.querySelector("#markers");
-const saveButton = document.querySelector("#saveButton");
-const MyMap = document.querySelector("#MyMap")
+const saveButton = document.querySelector("#saveMap");
+const MyMap = document.querySelector("#MyMap");
+const refresh = document.querySelector("#startNewMap");
 
 let map;
 let markers = [];
@@ -22,7 +23,13 @@ async function initMap() {
 
     var newMarkerDiv = document.createElement("div");
     var newMarkerName = document.createElement("h4");
-    var newMarkerPicture = document.createElement("button");
+    var newMarkerPicture = document.createElement("input");
+
+    newMarkerPicture.setAttribute("data-LatLong", event.latLng);
+    newMarkerPicture.addEventListener("change", function (e) {
+      console.log(e.target.value, e.target.getAttribute("data-LatLong"));
+      
+    });
 
     newMarkerName.textContent = `Marker ${markers.length}`;
     newMarkerName.setAttribute("contenteditable", "true");
@@ -35,6 +42,8 @@ async function initMap() {
 
     newMarkerDiv.style.border = "4px solid gray";
     newMarkerDiv.setAttribute("class", "col");
+
+    newMarkerPicture.setAttribute("type", "file");
     newMarkerPicture.style.float = "right";
   });
 
@@ -45,7 +54,6 @@ async function initMap() {
       position: location,
       map: map,
     });
-    console.log(position);
     var infowindow = new google.maps.InfoWindow({
       content: "No Picture Uploaded yet!",
     });
@@ -62,11 +70,45 @@ async function initMap() {
     });
   }
 
-  MyMap.addEventListener("click", function() {
+  //function to add markers on button click
+  function addExampleMarkers() {
+    // Array of coordinates for the points
+    const points = [
+      { lat: 35.5749, lng: -110.4194 },
+      { lat: 33.7749, lng: -110.4316 },
+      { lat: 32.7858, lng: -112.4064 },
+      // Add more points as needed
+    ];
+const images = [
+  "/pics/vacationImage1.jpeg",
+  "/pics/VacationImage2.jpeg",
+  "/pics/VacationImage3.jpeg",
+  "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
+  "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
+  "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"
 
-  })
 
+];
 
+    // Loop through the points array and add markers for each point
+    points.forEach((point, i) => {
+      new google.maps.Marker({
+        position: point,
+        map: map,
+        icon: images[i],
+      });
+    });
+  }
+
+  //listener for addExampleMarkers function
+  MyMap.addEventListener("click", async function () {
+    addExampleMarkers();
+  });
 }
+
+//refresh button
+refresh.addEventListener("click", function () {
+  location.reload();
+});
 
 initMap();
