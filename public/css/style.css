@@ -3,7 +3,7 @@ body {
     overflow-x: hidden;
     height: 100%;
     background-color: #B0BEC5;
-    background-repeat: no-repeat;
+    
 }
 
 .card0 {
@@ -119,6 +119,37 @@ a {
     color: #fff;
     background-color: #1A237E;
 }
+
+#map {
+    height: 750px;
+}
+
+#logoNav {
+    height: 75px;
+    float: left;
+}
+
+nav h1 {
+    text-align: center;
+}
+
+.hero {
+    background-image: url("../pics/pinit.jpg");
+    height: 500px;
+}
+
+nav {
+    padding: 0 0 2rem 0;
+}
+
+.start {
+    padding: 2rem 0 0 0;
+}
+
+.dashboardView {
+    height: 100%;;
+}
+
 
 @media screen and (max-width: 991px) {
     .logo {
