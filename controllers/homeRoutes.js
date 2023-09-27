@@ -1,29 +1,19 @@
 const router = require('express').Router();
-const { Map, User } = require('../../models');
-const withAuth = require('../../utils/auth');
+const { Map, User } = require('../models');
+const withAuth = require('../utils/auth');
 
-router.get('/login', async (req, res) => {
-    try {
-        const MapData = await Map.findAll({
-            include: [
-                {
-                    model: User,
-                    attributes: ['user_name'],
-                },
-            ],
-        });
-        const Maps = MapData.map((map) => map.get({ plain: true }));
-
-        res.render('login', {
-            Maps,
-            logged_in: req.session.logged_in
-        });
-    } catch (err) {
-        res.status(400).json({ message: 'login failed.'})
+router.get('/', (req, res) => {
+    if (req.session.logged_in) {
+        res.redirect('/dashboard');
+        return;
     }
-});
 
-router.get('/map/:id', async (req,res) => {
+    res.render('login');
+})
+
+
+
+router.get('/map/:id', withAuth, async (req,res) => {
     try {
         const MapData = await Map.findByPk(req.params.id, {
             include: [
@@ -61,8 +51,8 @@ router.get('/dashboard', withAuth, async (req, res) => {
     } catch (err) {
         res.status(400).json(err);
     }
-});
+})
 
-router.get('/login',)
+
 
 module.exports = router;
