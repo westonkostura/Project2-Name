@@ -26,7 +26,7 @@ Map.init(
         timestamps: false,
         freezeTAbleName: true,
         underscored: true,
-        modelName: 'marker',
+        modelName: 'map',
     }
 );
 module.exports = Map;
