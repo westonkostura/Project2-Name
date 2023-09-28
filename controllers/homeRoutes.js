@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
     }
 
     res.render('login');
-})
+});
 
 
 
@@ -53,6 +53,10 @@ router.get('/dashboard', withAuth, async (req, res) => {
     }
 })
 
+router.get('/register',  async (req, res) => {
+    
+    res.render('register')
+});
 
 
 module.exports = router;
