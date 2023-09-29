@@ -151,8 +151,15 @@ nav {
 #map {
     /* padding: 20px 0; */
     margin: 20px 0;
+    height: 500px;
+    width: 100%;
 }
 
+.editIcon::before {
+    content: "\F4CB";
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+  }
 
 @media screen and (max-width: 991px) {
     .logo {
@@ -174,9 +181,4 @@ nav {
     }
 }
 
-#map {
-    height: 500px;
-    width: 100%;
-  }
-  
 

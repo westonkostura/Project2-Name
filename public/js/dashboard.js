@@ -2,10 +2,13 @@ const markerDiv = document.querySelector("#markers");
 const saveButton = document.querySelector("#saveMap");
 const MyMap = document.querySelector("#MyMap");
 const refresh = document.querySelector("#startNewMap");
+const createPin = document.querySelector("#createPin");
+const pinForm = document.querySelector("#createPinForm");
 
 let map;
 let markers = [];
 
+//initial map function
 async function initMap() {
   const { Map } = await google.maps.importLibrary("maps");
 
@@ -17,6 +20,7 @@ async function initMap() {
     fullscreenControl: false,
   });
 
+  //custom marker class
   class CustomMarker extends google.maps.Marker {
     constructor(options) {
       super(options);
@@ -30,10 +34,10 @@ async function initMap() {
       return super.getTitle();
     }
   }
+
   //initalize placeMarker function on click on map
   google.maps.event.addListener(map, "click", function (event) {
     //function for creating new marker
-    
     function placeMarker(map, location) {
       var marker = new CustomMarker({
         title: `Pin ${markers.length}`,
@@ -54,59 +58,12 @@ async function initMap() {
 
       return marker;
     }
-
+    //placed marker from function
     var placedMarker = placeMarker(map, event.latLng);
     console.log(placedMarker);
-
-    var newMarkerDiv = document.createElement("div");
-    var newMarkerName = document.createElement("h4");
-    var newMarkerPictureForm = document.createElement("form");
-    var newMarkerPictureFile = document.createElement("input");
-    var newMarkerPictureButton = document.createElement("button");
-
-    newMarkerPictureForm.addEventListener("submit", function (event) {
-      event.preventDefault();
-    });
-
-    newMarkerPictureForm.setAttribute("method", "POST");
-    newMarkerPictureForm.setAttribute("action", "/profile-upload-single");
-    newMarkerPictureForm.setAttribute("enctype", "multipart/form-data");
-
-    newMarkerPictureFile.setAttribute("type", "file");
-    newMarkerPictureFile.setAttribute("name", "uploaded_image");
-    newMarkerPictureFile.required = true;
-
-    newMarkerPictureButton.textContent = "Upload Picture";
-
-    markerDiv.appendChild(newMarkerDiv);
-    newMarkerDiv.appendChild(newMarkerName);
-    newMarkerDiv.appendChild(newMarkerPictureForm);
-    newMarkerPictureForm.appendChild(newMarkerPictureFile);
-    newMarkerPictureForm.appendChild(newMarkerPictureButton);
-
-    // Store the marker variable as a property of the newMarkerDiv element
-    newMarkerDiv.dataset.marker = markers.indexOf(marker);
-
-    
-    newMarkerPictureFile.addEventListener("change", function (event) {
-      var markerId = parseInt(newMarkerDiv.dataset.markerId);
-      var marker = markers[markerId];
-      marker.setMap(null);
-      markers.splice(markerId, 1);
-      markerDiv.removeChild(markerDiv.childNodes[markerId]);
-    });
-
-    markerDiv.addEventListener("click", function (event) {
-      if (event.target.tagName === "BUTTON") {
-        var markerId = parseInt(event.target.parentNode.dataset.markerId);
-        var marker = markers[markerId];
-        console.log(marker);
-        // Do something with the marker object
-      }
-    });
-
-
   });
+
+  
 
 
   //function to add markers on button click
@@ -147,5 +104,26 @@ async function initMap() {
 refresh.addEventListener("click", function () {
   location.reload();
 });
+
+//save map button
+// saveButton.addEventListener("click", function () {
+//   console.log("save button clicked");
+//   console.log(markers);
+//   //function to save markers to database
+//   async function saveMarkers() {
+//     const response = await fetch("/api/map", {
+//       method: "POST",
+//       body: JSON.stringify({ markers }),
+//       headers: { "Content-Type": "application/json" },
+//     });
+//     console.log(response);
+//     if (response.ok) {
+//       document.location.replace("/dashboard");
+//     } else {
+//       alert(response.statusText);
+//     }
+//   }
+//   saveMarkers();
+// });
 
 initMap();
