@@ -3,6 +3,7 @@ const { Marker, User } = require('../models');
 const withAuth = require('../utils/auth');
 
 router.get('/', (req, res) => {
+    console.log('works');
     if (req.session.logged_in) {
         res.redirect('/dashboard');
         return;
@@ -36,6 +37,7 @@ router.get('/', (req, res) => {
 // });
 
 router.get('/dashboard', withAuth, async (req, res) => {
+    console.log('works');
     try {
         const userData = await User.findByPk(req.session.user_id, {
             attributes: { exclude: ['password'] },
