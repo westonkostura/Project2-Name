@@ -17,58 +17,88 @@ async function initMap() {
     fullscreenControl: false,
   });
 
+  class CustomMarker extends google.maps.Marker {
+    constructor(options) {
+      super(options);
+    }
+  
+    getPosition() {
+      return super.getPosition();
+    }
+
+    getTitle() {
+      return super.getTitle();
+    }
+  }
   //initalize placeMarker function on click on map
   google.maps.event.addListener(map, "click", function (event) {
-    placeMarker(map, event.latLng);
 
+    //function for creating new marker
+    function placeMarker(map, location) {
+      var marker = new CustomMarker({
+        title: `Pin ${markers.length}`,
+        position: location,
+        map: map,
+      });
+      var infowindow = new google.maps.InfoWindow({
+        content: "No Picture Uploaded yet!",
+      });
+      infowindow.open(map, marker);
+      markers.push(marker);
+      console.log("placed markers", markers);
+  
+      //listener to open infoWindow on marker click
+      marker.addListener("click", () => {
+        infowindow.open(map, marker);
+      });
+  
+      return marker;
+    }
+
+
+    var placedMarker = placeMarker(map, event.latLng);
+    console.log(placedMarker);
+
+    
     var newMarkerDiv = document.createElement("div");
     var newMarkerName = document.createElement("h4");
-    var newMarkerPicture = document.createElement("input");
-
-    newMarkerPicture.setAttribute("data-LatLong", event.latLng);
-    newMarkerPicture.addEventListener("change", function (e) {
-      console.log(e.target.value, e.target.getAttribute("data-LatLong"));
-      
+    var newMarkerPictureForm = document.createElement("form");
+    var newMarkerPictureFile = document.createElement("input");
+    var newMarkerPictureButton = document.createElement("button");
+    
+    newMarkerPictureForm.addEventListener("submit", function (event) {
+      event.preventDefault();
     });
 
-    newMarkerName.textContent = `Marker ${markers.length}`;
-    newMarkerName.setAttribute("contenteditable", "true");
-    newMarkerPicture.innerText = "Upload Picture";
-    newMarkerPicture.setAttribute("class", "btn btn-secondary btn-md");
 
-    markerDiv.appendChild(newMarkerDiv);
-    newMarkerDiv.appendChild(newMarkerName);
-    newMarkerDiv.appendChild(newMarkerPicture);
+    newMarkerPictureForm.setAttribute('method', 'POST');
+    newMarkerPictureForm.setAttribute('action', '/profile-upload-single');
+    newMarkerPictureForm.setAttribute('enctype', 'multipart/form-data');
 
-    newMarkerDiv.style.border = "4px solid gray";
-    newMarkerDiv.setAttribute("class", "col");
+    newMarkerPictureFile.setAttribute('type', 'file');
+    newMarkerPictureFile.setAttribute('name', 'uploaded_image');
+    newMarkerPictureFile.required = true;
 
-    newMarkerPicture.setAttribute("type", "file");
-    newMarkerPicture.style.float = "right";
+    newMarkerPictureButton.textContent = "Upload Picture";
+
+   markerDiv.appendChild(newMarkerDiv);
+   newMarkerDiv.appendChild(newMarkerName);
+   newMarkerDiv.appendChild(newMarkerPictureForm);
+   newMarkerPictureForm.appendChild(newMarkerPictureFile);
+   newMarkerPictureForm.appendChild(newMarkerPictureButton);
+
+   // Store the marker variable as a property of the newMarkerDiv element
+  // newMarkerDiv.dataset.marker = markers.indexOf(marker);
+
+   newMarkerPictureFile.addEventListener("change", function (event, placedMarker) {
+    console.log(event);
+    var markerIndex = markers.indexOf(placedMarker);
+    placedMarker.setMap(null);
+    markers.splice(markerIndex, 1);
+    markerDiv.removeChild(markerDiv.childNodes[markerIndex]);
+  });
   });
 
-  //function for creating new marker
-  function placeMarker(map, location) {
-    var marker = new google.maps.Marker({
-      title: `Pin ${markers.length}`,
-      position: location,
-      map: map,
-    });
-    var infowindow = new google.maps.InfoWindow({
-      content: "No Picture Uploaded yet!",
-    });
-    infowindow.open(map, marker);
-    markers.push(marker);
-    console.log(markers);
-
-    //listener to open infoWindow on marker click
-    marker.addListener("click", () => {
-      infowindow.open({
-        anchor: marker,
-        map,
-      });
-    });
-  }
 
   //function to add markers on button click
   function addExampleMarkers() {
@@ -79,16 +109,14 @@ async function initMap() {
       { lat: 32.7858, lng: -112.4064 },
       // Add more points as needed
     ];
-const images = [
-  "/pics/vacationImage1.jpeg",
-  "/pics/VacationImage2.jpeg",
-  "/pics/VacationImage3.jpeg",
-  "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
-  "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
-  "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"
-
-
-];
+    const images = [
+      "/pics/vacationImage1.jpeg",
+      "/pics/VacationImage2.jpeg",
+      "/pics/VacationImage3.jpeg",
+      "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
+      "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
+      "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
+    ];
 
     // Loop through the points array and add markers for each point
     points.forEach((point, i) => {
