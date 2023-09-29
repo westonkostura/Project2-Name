@@ -7,28 +7,37 @@ render new pin locations }}
 
 <div>
 
-  <div class="hero-image">
-    <div class="col-auto hero-text">
-      <h2>Welcome, {{username}}</h2>
-    </div>
-  </div>
+ <nav>
+        <img src="../pics/Pin-It.jpg" alt="logo image" id="logoNav">
+        <h1 id="logoHeader">Pin It!</h1>
 
-<aside>
+    </nav>
+    <div class="hero"></div>
+    <div class="start container-fluid">
+       <div class="row">
+        <div class="col-md-3">
+            <h2>Created Pins</h2>
+            <button type="button" class="btn btn-warning" id="startNewMap">Start New Map</button>
+            <div id="markers"></div>
+            <button type="button" class="btn btn-warning" id="SaveMap">Save New Map</button>
 
-    <button type="button" class="btn btn-primary" id="saveButton">Save New Maps</button>
-    <div id="markers"></div>
+            <h1 class="myMaps">My Maps</h1>
+            <button type="button" class="btn btn-warning" id="MyMap">Map 1</button>
 
-    <button type="button" class="btn btn-primary">Create Pin</button>
 
-    <button type="button" class="btn btn-success">My Maps</button>
-    <button type="button" class="btn btn-warning">Shared Maps</button>
-  </aside>
+        </div>
+        <div class="col-md-9">
+            <div id="map"></div>
+        </div>
+       </div>
 
-<div>
-    <h2>Map</h2>
-    {{!-- display map, 
-    render information when buttons are clicked. 
-    prompt for create pin
-    render information for my maps and shared maps on the Map  --}}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script>(g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })
+            ({ key: "AIzaSyCqVCTPcfFsMOco6Jv2pnysmg3UUOItL3s", v: "weekly" });</script>
+
+            <script src="./js/dashboard.js"></script>
 </div>
 
