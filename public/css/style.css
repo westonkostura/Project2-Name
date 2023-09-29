@@ -121,9 +121,6 @@ a {
     background-color: #1A237E;
 }
 
-#map {
-    height: 750px;
-}
 
 #logoNav {
     height: 75px;
@@ -149,6 +146,11 @@ nav {
 
 .dashboardView {
     height: 100%;;
+}
+
+#map {
+    /* padding: 20px 0; */
+    margin: 20px 0;
 }
 
 
