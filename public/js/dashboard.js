@@ -21,7 +21,7 @@ async function initMap() {
     constructor(options) {
       super(options);
     }
-  
+
     getPosition() {
       return super.getPosition();
     }
@@ -32,8 +32,8 @@ async function initMap() {
   }
   //initalize placeMarker function on click on map
   google.maps.event.addListener(map, "click", function (event) {
-
     //function for creating new marker
+    
     function placeMarker(map, location) {
       var marker = new CustomMarker({
         title: `Pin ${markers.length}`,
@@ -46,57 +46,66 @@ async function initMap() {
       infowindow.open(map, marker);
       markers.push(marker);
       console.log("placed markers", markers);
-  
+
       //listener to open infoWindow on marker click
       marker.addListener("click", () => {
         infowindow.open(map, marker);
       });
-  
+
       return marker;
     }
-
 
     var placedMarker = placeMarker(map, event.latLng);
     console.log(placedMarker);
 
-    
     var newMarkerDiv = document.createElement("div");
     var newMarkerName = document.createElement("h4");
     var newMarkerPictureForm = document.createElement("form");
     var newMarkerPictureFile = document.createElement("input");
     var newMarkerPictureButton = document.createElement("button");
-    
+
     newMarkerPictureForm.addEventListener("submit", function (event) {
       event.preventDefault();
     });
 
+    newMarkerPictureForm.setAttribute("method", "POST");
+    newMarkerPictureForm.setAttribute("action", "/profile-upload-single");
+    newMarkerPictureForm.setAttribute("enctype", "multipart/form-data");
 
-    newMarkerPictureForm.setAttribute('method', 'POST');
-    newMarkerPictureForm.setAttribute('action', '/profile-upload-single');
-    newMarkerPictureForm.setAttribute('enctype', 'multipart/form-data');
-
-    newMarkerPictureFile.setAttribute('type', 'file');
-    newMarkerPictureFile.setAttribute('name', 'uploaded_image');
+    newMarkerPictureFile.setAttribute("type", "file");
+    newMarkerPictureFile.setAttribute("name", "uploaded_image");
     newMarkerPictureFile.required = true;
 
     newMarkerPictureButton.textContent = "Upload Picture";
 
-   markerDiv.appendChild(newMarkerDiv);
-   newMarkerDiv.appendChild(newMarkerName);
-   newMarkerDiv.appendChild(newMarkerPictureForm);
-   newMarkerPictureForm.appendChild(newMarkerPictureFile);
-   newMarkerPictureForm.appendChild(newMarkerPictureButton);
+    markerDiv.appendChild(newMarkerDiv);
+    newMarkerDiv.appendChild(newMarkerName);
+    newMarkerDiv.appendChild(newMarkerPictureForm);
+    newMarkerPictureForm.appendChild(newMarkerPictureFile);
+    newMarkerPictureForm.appendChild(newMarkerPictureButton);
 
-   // Store the marker variable as a property of the newMarkerDiv element
-  // newMarkerDiv.dataset.marker = markers.indexOf(marker);
+    // Store the marker variable as a property of the newMarkerDiv element
+    newMarkerDiv.dataset.marker = markers.indexOf(marker);
 
-   newMarkerPictureFile.addEventListener("change", function (event, placedMarker) {
-    console.log(event);
-    var markerIndex = markers.indexOf(placedMarker);
-    placedMarker.setMap(null);
-    markers.splice(markerIndex, 1);
-    markerDiv.removeChild(markerDiv.childNodes[markerIndex]);
-  });
+    
+    newMarkerPictureFile.addEventListener("change", function (event) {
+      var markerId = parseInt(newMarkerDiv.dataset.markerId);
+      var marker = markers[markerId];
+      marker.setMap(null);
+      markers.splice(markerId, 1);
+      markerDiv.removeChild(markerDiv.childNodes[markerId]);
+    });
+
+    markerDiv.addEventListener("click", function (event) {
+      if (event.target.tagName === "BUTTON") {
+        var markerId = parseInt(event.target.parentNode.dataset.markerId);
+        var marker = markers[markerId];
+        console.log(marker);
+        // Do something with the marker object
+      }
+    });
+
+
   });
 
 
