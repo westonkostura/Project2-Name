@@ -26,15 +26,19 @@ Marker.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        map_id: {
-            type: DataTypes.STRING,
-            allowNull: false
+        user_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'user',
+                key: 'id',
+            }
         }
     },
     {
         sequelize,
         timestamps: false,
-        freezeTAbleName: true,
+        freezeTableName: true,
         underscored: true,
         modelName: 'marker',
     }

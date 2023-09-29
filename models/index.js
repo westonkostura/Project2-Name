@@ -8,11 +8,13 @@ User.hasMany(Marker, {
 });
 
 Marker.belongsTo(User, {
-    foreignKey: 'marker_id'
+    foreignKey: 'user_id'
 });
 
 Map.belongsTo(User, {
     foreignKey: 'map_id'
-})
+});
+
+
 
 module.exports = { User, Marker, Map }
