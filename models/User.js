@@ -12,17 +12,17 @@ User.init(
     {
         id: {
             type: DataTypes.INTEGER,
-            allowNUll: false,
+            allowNull: false,
             primaryKey: true,
             autoIncrement: true,
         },
-        user_name: {
+        name: {
             type: DataTypes.STRING,
-            allowNUll: false,
+            allowNull: false,
         },
         email: {
             type: DataTypes.STRING,
-            allowNUll: false,
+            allowNull: false,
             unique: true,
             validate: {
                 isEmail: true,
@@ -30,9 +30,9 @@ User.init(
         },
         password: {
             type: DataTypes.STRING,
-            allowNUll: false,
+            allowNull: false,
             validate: {
-                len: [10],
+                len: [8],
             },
         },
     },
@@ -45,7 +45,7 @@ User.init(
         },
         sequelize,
         timestamps: false,
-        freezeTAbleName: true,
+        freezeTableName: true,
         underscored: true,
         modelName: 'user',
     }

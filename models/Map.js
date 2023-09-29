@@ -16,10 +16,14 @@ Map.init(
             type: DataTypes.STRING,
             allowNUll: false,
         },
-        Markers: {
-            type: DataTypes.STRING,
+        marker_id: {
+            type: DataTypes.INTEGER,
             allowNUll: false,
-        },
+            references: {
+                model: 'marker',
+                key: 'id',
+            }
+        }
     },
     {
         sequelize,
