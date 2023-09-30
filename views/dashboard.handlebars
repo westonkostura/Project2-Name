@@ -19,12 +19,35 @@ render new pin locations }}
     <div class="start container-fluid">
        <div class="row">
         <div class="col-md-3">
-            <h2>Created Pins</h2>
+            <h2>Create a Pin</h2>
             <button type="button" class="btn btn-warning" id="startNewMap">Start New Map</button>
-            <div id="markers"></div>
-            <button type="button" class="btn btn-warning" id="SaveMap">Save New Map</button>
+            <form id="createPinForm">
+        <div class="form-group">
+      <label for="pinTitle">Pin Title</label>
+      <input type="text" class="form-control" id="pinTitle" placeholder="Enter Pin Title" required>
+     </div>
+        <div class="form-group">
+      <label for="pinLocation">Pin Location</label>
+      <input type="text" class="form-control" id="pinLocation" placeholder="Enter Pin Location" required>
+        </div>
+        <div class="form-group">
+      <form method="POST" action="/profile-upload-single" enctype="multipart/form-data">
+    <div>
+        <input type="file" name="profile-file" required/>
+    </div>
 
-            <h1 class="myMaps">My Maps</h1>
+</form>
+    </div>
+</form>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Pin</button>
+        </form>
+            <button type="button" class="btn btn-warning" id="SaveMap">Save New Map</button>
+        <h3 class="myMaps">Created Pins</h3>
+        <div id="createdPins"></div>
+            <div id="markers"></div>
+
+            <h3 class="myMaps">My Maps</h3>
             <button type="button" class="btn btn-warning" id="MyMap">Map 1</button>
 
 
