@@ -133,7 +133,16 @@ nav h1 {
 
 .hero {
     background-image: url("../pics/pinit.jpg");
-    height: 500px;
+    height: 450px;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.hero-text {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    padding: 200px;
 }
 
 nav {
