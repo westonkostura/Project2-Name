@@ -50,15 +50,16 @@ async function initMap() {
     fullscreenControl: false,
   });
 
-
-
   //function to add marker on form submit
   pinForm.addEventListener("submit", function (event) {
     console.log("form submitted");
     event.preventDefault();
 
-//save search value to enter in url
-    const search = document.querySelector("#pinLocation").value.split(" ").join("%20");
+    //save search value to enter in url
+    const search = document
+      .querySelector("#pinLocation")
+      .value.split(" ")
+      .join("%20");
 
     var requestOptions = {
       method: "GET",
@@ -73,23 +74,31 @@ async function initMap() {
         const pinImage = document.querySelector("#pinImage").files[0];
         var coordinates = result.features[0].geometry.coordinates;
         console.log(coordinates);
-        var coordinates = result.features[0].geometry.coordinates;
-        console.log(coordinates);
 
-        //create google maps marker
-        var marker = new google.maps.Marker({
-          position: { lat: coordinates[1], lng: coordinates[0] },
-          map: map,
-          title: pinTitle,
-          icon: pinImage,
-        });
-        //push marker to markers array
-        markers.push(marker);
+        // create FileReader object to read pinImage file
+        const reader = new FileReader();
+        reader.readAsDataURL(pinImage);
+        reader.onload = function () {
+          // create google maps marker with pinImage as icon
+          var marker = new google.maps.Marker({
+            position: { lat: coordinates[1], lng: coordinates[0] },
+            map: map,
+            title: pinTitle,
+            icon: {
+              url: reader.result,
+              scaledSize: new google.maps.Size(50, 50),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(25, 25),
+            },
+          });
+          // push marker to markers array
+          markers.push(marker);
+        };
       })
       .catch((error) => console.log("error", error));
 
-      //reset form 
-      pinForm.reset();
+    //reset form
+    pinForm.reset();
   });
 
   //function to add markers on button click
