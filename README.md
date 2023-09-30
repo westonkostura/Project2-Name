@@ -32,7 +32,7 @@ User wants a new way to use aspects of social media. As a developer we have crea
 ISC
 
 ### Deployment
-[Live]
+[Live] https://group6-pinit-ed814e5448cb.herokuapp.com/
 
 
 #### Screenshots
