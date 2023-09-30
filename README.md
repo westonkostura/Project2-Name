@@ -36,7 +36,7 @@ ISC
 
 
 #### Screenshots
-![Image]
+![Image]  https://github.com/westonkostura/Project2-PinIt/blob/main/public/pics/pin-itss.png
 
 #### Resources:
 ASU Bootcamp
