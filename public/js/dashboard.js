@@ -3,10 +3,40 @@ const saveButton = document.querySelector("#saveMap");
 const MyMap = document.querySelector("#MyMap");
 const refresh = document.querySelector("#startNewMap");
 const createPin = document.querySelector("#createPin");
+
+//form components
 const pinForm = document.querySelector("#createPinForm");
+const pinTitle = document.querySelector("#pinTitle");
+const pinLocation = document.querySelector("#pinLocation");
+const pinImage = document.querySelector("#pinImage");
 
 let map;
 let markers = [];
+// let autocomplete;
+
+// //init autocomplete function
+// function initAutoComplete() {
+// autocomplete = new google.maps.places.Autocomplete(
+//     document.getElementById("pinLocation"),
+//     {
+//       types: ["geocode"],
+//       componentRestrictions: { country: "us" },
+//       fields: ["place_id", "geometry", "name"],
+//     });
+
+//     autocomplete.addListener('place_changed', onPlaceChanged)
+// }
+// function onPlaceChanged() {
+
+// var place = autocomplete.getPlace();
+
+// if(!place.geometry) {
+//   document.getElementById('pinLocation').placeholder = 'Enter a place';
+// }
+// else {
+//   document.getElementById('pinLocation').innerHTML = place.name;
+// }
+// }
 
 //initial map function
 async function initMap() {
@@ -20,51 +50,47 @@ async function initMap() {
     fullscreenControl: false,
   });
 
-  //custom marker class
-  class CustomMarker extends google.maps.Marker {
-    constructor(options) {
-      super(options);
-    }
 
-    getPosition() {
-      return super.getPosition();
-    }
 
-    getTitle() {
-      return super.getTitle();
-    }
-  }
+  //function to add marker on form submit
+  pinForm.addEventListener("submit", function (event) {
+    console.log("form submitted");
+    event.preventDefault();
 
-  //initalize placeMarker function on click on map
-  google.maps.event.addListener(map, "click", function (event) {
-    //function for creating new marker
-    function placeMarker(map, location) {
-      var marker = new CustomMarker({
-        title: `Pin ${markers.length}`,
-        position: location,
-        map: map,
-      });
-      var infowindow = new google.maps.InfoWindow({
-        content: "No Picture Uploaded yet!",
-      });
-      infowindow.open(map, marker);
-      markers.push(marker);
-      console.log("placed markers", markers);
+//save search value to enter in url
+    const search = document.querySelector("#pinLocation").value.split(" ").join("%20");
 
-      //listener to open infoWindow on marker click
-      marker.addListener("click", () => {
-        infowindow.open(map, marker);
-      });
+    var requestOptions = {
+      method: "GET",
+    };
+    var url = `https://api.geoapify.com/v1/geocode/search?text=${search}&apiKey=ef053a480d684eafa8e0588324270007`;
+    console.log(url);
+    fetch(url, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        // get form values
+        const pinTitle = document.querySelector("#pinTitle").value;
+        const pinImage = document.querySelector("#pinImage").files[0];
+        var coordinates = result.features[0].geometry.coordinates;
+        console.log(coordinates);
+        var coordinates = result.features[0].geometry.coordinates;
+        console.log(coordinates);
 
-      return marker;
-    }
-    //placed marker from function
-    var placedMarker = placeMarker(map, event.latLng);
-    console.log(placedMarker);
+        //create google maps marker
+        var marker = new google.maps.Marker({
+          position: { lat: coordinates[1], lng: coordinates[0] },
+          map: map,
+          title: pinTitle,
+          icon: pinImage,
+        });
+        //push marker to markers array
+        markers.push(marker);
+      })
+      .catch((error) => console.log("error", error));
+
+      //reset form 
+      pinForm.reset();
   });
-
-  
-
 
   //function to add markers on button click
   function addExampleMarkers() {
@@ -93,12 +119,12 @@ async function initMap() {
       });
     });
   }
-
-  //listener for addExampleMarkers function
-  MyMap.addEventListener("click", async function () {
-    addExampleMarkers();
-  });
 }
+
+//listener for addExampleMarkers function
+MyMap.addEventListener("click", async function () {
+  addExampleMarkers();
+});
 
 //refresh button
 refresh.addEventListener("click", function () {
