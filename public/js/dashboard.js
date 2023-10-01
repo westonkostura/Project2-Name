@@ -50,35 +50,36 @@ async function initMap() {
     fullscreenControl: false,
   });
 
-  //function to add marker on form submit
-  pinForm.addEventListener("submit", function (event) {
-    console.log("form submitted");
-    event.preventDefault();
+  // add event listener to pinForm
+pinForm.addEventListener("submit", function (event) {
+  event.preventDefault();
 
-    //save search value to enter in url
-    const search = document
-      .querySelector("#pinLocation")
-      .value.split(" ")
-      .join("%20");
+  // get form values
+  const pinTitle = document.querySelector("#pinTitle").value;
+  // const pinImage = document.querySelector("#pinImage").files[0];
+  console.log(pinImage);
 
-    var requestOptions = {
-      method: "GET",
-    };
-    var url = `https://api.geoapify.com/v1/geocode/search?text=${search}&apiKey=ef053a480d684eafa8e0588324270007`;
-    console.log(url);
-    fetch(url, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        // get form values
-        const pinTitle = document.querySelector("#pinTitle").value;
-        const pinImage = document.querySelector("#pinImage").files[0];
-        var coordinates = result.features[0].geometry.coordinates;
-        console.log(coordinates);
+  // check if pinImage is not null or undefined
+  if (pinImage) {
+    // create FileReader object to read pinImage file
+    const reader = new FileReader();
+    reader.readAsDataURL(pinImage);
+    reader.onload = function () {
+      // log data URL of pinImage file
+      console.log(reader.result);
 
-        // create FileReader object to read pinImage file
-        const reader = new FileReader();
-        reader.readAsDataURL(pinImage);
-        reader.onload = function () {
+      // get coordinates from Geoapify API
+      var requestOptions = {
+        method: "GET",
+      };
+      var url = `https://api.geoapify.com/v1/geocode/search?text=${search}&apiKey=ef053a480d684eafa8e0588324270007`;
+      console.log(url);
+      fetch(url, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          var coordinates = result.features[0].geometry.coordinates;
+          console.log(coordinates);
+
           // create google maps marker with pinImage as icon
           var marker = new google.maps.Marker({
             position: { lat: coordinates[1], lng: coordinates[0] },
@@ -93,13 +94,17 @@ async function initMap() {
           });
           // push marker to markers array
           markers.push(marker);
-        };
-      })
-      .catch((error) => console.log("error", error));
+        })
+        .catch((error) => console.log("error", error));
+    };
+  } else {
+    // handle case where pinImage is null or undefined
+    console.log("No image selected");
+  }
 
-    //reset form
-    pinForm.reset();
-  });
+  //reset form
+  pinForm.reset();
+});
 
   //function to add markers on button click
   function addExampleMarkers() {
@@ -124,16 +129,18 @@ async function initMap() {
       new google.maps.Marker({
         position: point,
         map: map,
-        icon: images[i],
+        icon: {
+          url: images[i],
+          scaledSize: new google.maps.Size(50, 50),
+        }
       });
     });
   }
+    //listener for addExampleMarkers function
+    MyMap.addEventListener("click", function () {
+addExampleMarkers();    });
 }
 
-//listener for addExampleMarkers function
-MyMap.addEventListener("click", async function () {
-  addExampleMarkers();
-});
 
 //refresh button
 refresh.addEventListener("click", function () {
@@ -141,6 +148,7 @@ refresh.addEventListener("click", function () {
 });
 
 //save map button
+
 // saveButton.addEventListener("click", function () {
 //   console.log("save button clicked");
 //   console.log(markers);

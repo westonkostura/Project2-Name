@@ -34,13 +34,13 @@ render new pin locations }}
       <form method="POST" action="/profile-upload-single" enctype="multipart/form-data">
     <div>
         <input type="file" name="profile-file" required/>
+        <button type="submit" >Upload</button>
     </div>
 
         <button type="submit" class="btn btn-primary">Create Pin</button>
 </form>
     </div>
 </form>
-        </div>
         </form>
             <button type="button" class="btn btn-warning" id="SaveMap">Save New Map</button>
         <h3 class="myMaps">Created Pins</h3>
@@ -54,6 +54,7 @@ render new pin locations }}
         </div>
         <div class="col-md-9">
             <div id="map"></div>
+        </div>
         </div>
        </div>
          <div id="logout">
