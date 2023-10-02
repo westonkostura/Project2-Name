@@ -36,12 +36,14 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ storage: storage });
 
-app.post("/upload", upload.single("image"), function (req, res) {
+app.post("/uploads", upload.single("image"), function (req, res) {
 console.log(req.file);
 });
 
-app.get("/upload", (req, res) => {
-  res.render("upload");
+// GET route with dynamic route parameter
+app.get("/image/:filename", (req, res) => {
+  const filename = req.params.filename;
+  res.sendFile(path.join(__dirname, "uploads", filename));
 });
 
 
