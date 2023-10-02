@@ -1,6 +1,6 @@
 const markerDiv = document.querySelector("#markers");
-const saveButton = document.querySelector("#saveMap");
-const MyMap = document.querySelector("#MyMap");
+const saveButton = document.querySelector("#SaveMap");
+const myMap = document.querySelector("#MyMap");
 const refresh = document.querySelector("#startNewMap");
 const createPin = document.querySelector("#createPin");
 const createdPins = document.querySelector("#createdPins");
@@ -26,14 +26,19 @@ pictureUpload.addEventListener('submit', function(event) {
     method: 'POST',
     body: formData
   })
-  .then(response => {
-    console.log('File uploaded successfully');
-    console.log(response);
-  })
-  .catch(error => {
-    console.error('Error uploading file:', error);
-    // handle the error
-  });
+    .then(response => {
+      if (response.ok) {
+        alert('File uploaded successfully')
+        } else {
+        alert('File upload failed')
+        };
+      console.log('File uploaded successfully');
+      console.log(response);
+    })
+    .catch(error => {
+      console.error('Error uploading file:', error);
+      // handle the error
+    });
 });
 
 // add event listener to pinForm
@@ -69,11 +74,12 @@ pinForm.addEventListener("submit", function (event) {
       markers.push({
         title: pinTitle,
         position: { lat: coordinates[1], lng: coordinates[0] },
+        image: pinImage,
       });
 
       console.log(markers);
 
-//created marker div
+      //created marker div
       // loop through markers array and create new div for newest marker
       const newestMarkerIndex = markers.length - 1;
       const newestMarker = markers[newestMarkerIndex];
@@ -90,9 +96,16 @@ pinForm.addEventListener("submit", function (event) {
       const markerLocation = document.createElement("p");
       markerLocation.textContent = `Lat: ${newestMarker.position.lat}, Lng: ${newestMarker.position.lng}`;
 
-      // append title and location to newest marker div
+      // create new img element for newest marker image
+
+      //**** this does not work current, keeps bringing null image */
+      const markerImage = document.createElement("img");
+      markerImage.src = newestMarker.image;
+
+      // append title, location, and image to newest marker div
       createdMarkerdiv.appendChild(markerTitle);
       createdMarkerdiv.appendChild(markerLocation);
+      createdMarkerdiv.appendChild(markerImage);
 
       // append newest marker div to createdPins div
       createdPins.appendChild(createdMarkerdiv);
@@ -102,6 +115,44 @@ pinForm.addEventListener("submit", function (event) {
   //reset form
   pinForm.reset();
 });
+
+// add event listener to saveButton
+saveButton.addEventListener("click", function () {
+  // create new array to store marker data
+  const markerData = [];
+
+  // loop through markers array and push title and position to markerData array
+  markers.forEach((marker) => {
+    markerData.push({
+      title: marker.title,
+      position: marker.position,
+      image: marker.image,
+    });
+  });
+  console.log(markerData);
+
+
+});
+// add event listener to myMap
+myMap.addEventListener("click", function () {
+  // call the function to render data
+  renderData();
+});
+
+// function to render data
+function renderData() {
+  // still not working, need to figure out how to get the image to render
+  markerData.forEach((markerData, i) => {
+    new google.maps.Marker({
+      position: markerData.position,
+      map: map,
+      icon: {
+        url: images[i],
+        scaledSize: new google.maps.Size(50, 50),
+      },
+    });
+  });
+}
 
 //initial map function
 async function initMap() {
@@ -114,6 +165,8 @@ async function initMap() {
     streetViewControl: false,
     fullscreenControl: false,
   });
+
+
 
   //function to add markers on button click
   function addExampleMarkers() {
