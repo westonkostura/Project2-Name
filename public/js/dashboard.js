@@ -17,8 +17,23 @@ let map;
 let markers = [];
 
 // add event listener for pictureUplaod
-pictureUpload.addEventListener("change", function (event) { 
-  event.preventDefault();
+pictureUpload.addEventListener('submit', function(event) {
+  event.preventDefault(); // prevent default form submission behavior
+
+  const formData = new FormData(pictureUpload);
+
+  fetch('/upload', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => {
+    console.log('File uploaded successfully');
+    console.log(response);
+  })
+  .catch(error => {
+    console.error('Error uploading file:', error);
+    // handle the error
+  });
 });
 
 // add event listener to pinForm
@@ -57,6 +72,8 @@ pinForm.addEventListener("submit", function (event) {
       });
 
       console.log(markers);
+
+//created marker div
       // loop through markers array and create new div for newest marker
       const newestMarkerIndex = markers.length - 1;
       const newestMarker = markers[newestMarkerIndex];
