@@ -25,11 +25,7 @@ const sess = {
   }),
 };
 
-// create uploads folder if it doesn't exist
-const UPLOADS_DIR = "./uploads";
-if (!fs.existsSync(UPLOADS_DIR)) {
-  fs.mkdirSync(UPLOADS_DIR);
-}
+
 
 //multer middleware for uploading pictures
 var storage = multer.diskStorage({
@@ -42,6 +38,17 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ storage: storage });
 
+app.post('/upload', function (req, res) {
+  upload(req, res, function (err) {
+    if (err) {
+      console.log(err);
+      // An error occurred when uploading
+      return
+    }
+
+    // Everything went fine
+  })
+})
 app.post(
   "/profile-upload-single",
   upload.single("profile-file"),
@@ -55,6 +62,8 @@ app.post(
     return res.send(response);
   }
 );
+
+
 
 app.use(session(sess));
 
@@ -71,3 +80,5 @@ app.use(routes);
 sequelize.sync({ force: true }).then(() => {
   app.listen(PORT, () => console.log("Now listening"));
 });
+
+module.exports = upload;
