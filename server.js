@@ -7,6 +7,24 @@ const helpers = require("./utils/helpers");
 const multer = require("multer");
 const fs = require("fs");
 
+// Get the current date and time in milliseconds since January 1, 1970
+const millisecondsSince1970 = Date.now();
+
+// Create a new Date object using the current timestamp
+const currentDate = new Date(millisecondsSince1970);
+
+// Extract the components of the date
+const year = currentDate.getFullYear();
+const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based, so add 1
+const day = currentDate.getDate().toString().padStart(2, '0');
+
+
+// Format the date as "MM-DD-YYYY"
+const formattedDate = `${month}-${day}-${year}`;
+
+console.log(formattedDate);
+
+
 const sequelize = require("./config/connection");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
@@ -28,10 +46,10 @@ console.log(Date.now());
 //multer middleware for uploading pictures
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads");
+    cb(null, "uploads/");
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
+   cb(null, formattedDate + '-' + file.originalname);
   },
 });
 var upload = multer({ storage: storage });
