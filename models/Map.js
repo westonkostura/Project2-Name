@@ -7,24 +7,20 @@ class Map extends Model {}
 Map.init(
     {
         id: {
-            type: DataTypes.INTEGER,
-            allowNUll: false,
-            primaryKey: true,
-            autoIncrement: true,
+          type: DataTypes.INTEGER,
+          allowNull: false,
+          primaryKey: true,
+          autoIncrement: true,
         },
-        map_name: {
-            type: DataTypes.STRING,
-            allowNUll: false,
+        mapname: {
+          type: DataTypes.STRING,
+          allowNull: false,
         },
-        marker_id: {
-            type: DataTypes.INTEGER,
-            allowNUll: false,
-            references: {
-                model: 'marker',
-                key: 'id',
-            }
-        }
-    },
+        markerdata: {
+          type: DataTypes.JSON,
+          allowNull: false,
+        },
+      },
     {
         sequelize,
         timestamps: false,
