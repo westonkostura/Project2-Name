@@ -28,11 +28,6 @@ async function initMap() {
     fullscreenControl: false,
   });
 
-  // add event listener for image form
-  pictureUpload.addEventListener("submit", function (event) {
-    event.preventDefault();
-    console.log("picture upload form submitted");
-  });
 
   // add event listener to pinForm
   pinForm.addEventListener("submit", function (event) {

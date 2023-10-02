@@ -26,13 +26,13 @@ render new pin locations }}
         <button type="button" class="btn btn-warning" id="startNewMap">Start New
           Map</button>
 <!-- form to upload image -->
-<form id="pictureUpload" method="POST" action="/profile-upload-single" enctype="multipart/form-data">
+<form id="pictureUpload" method="POST" action="/upload" enctype="multipart/form-data">
     <div>
         <label>Upload profile picture</label>
-        <input type="file" name="profile-file" required/>
+        <input type="file" name="image"/>
     </div>
     <div>
-        <input type="submit" value="Upload" />
+        <input type="submit" value="Upload"/>
     </div>
 </form>
 <!-- start of create pin form -->

@@ -24,46 +24,28 @@ const sess = {
     db: sequelize,
   }),
 };
-
-
-
+console.log(Date.now());
 //multer middleware for uploading pictures
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/");
+    cb(null, "uploads");
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+    cb(null, Date.now() + path.extname(file.originalname));
   },
 });
 var upload = multer({ storage: storage });
 
-app.post('/upload', function (req, res) {
-  upload(req, res, function (err) {
-    if (err) {
-      console.log(err);
-      // An error occurred when uploading
-      return
-    }
+app.post("/upload", upload.single("image"), function (req, res) {
+console.log(req.file);
+});
 
-    // Everything went fine
-  })
-})
-app.post(
-  "/profile-upload-single",
-  upload.single("profile-file"),
-  function (req, res, next) {
-    // req.file is the `profile-file` file
-    // req.body will hold the text fields, if there were any
-    console.log(JSON.stringify(req.file));
-    var response = '<a href="/">Home</a><br>';
-    response += "Files uploaded successfully.<br>";
-    response += `<img src="${req.file.path}" /><br>`;
-    return res.send(response);
-  }
-);
+app.get("/upload", (req, res) => {
+  res.render("upload");
+});
 
 
+app.use("/uploads", express.static("uploads"));
 
 app.use(session(sess));
 
@@ -73,12 +55,9 @@ app.set("view engine", "handlebars");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/uploads", express.static("uploads"));
 
 app.use(routes);
 
 sequelize.sync({ force: true }).then(() => {
   app.listen(PORT, () => console.log("Now listening"));
 });
-
-module.exports = upload;
