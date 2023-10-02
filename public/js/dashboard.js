@@ -64,21 +64,6 @@ pinForm.addEventListener("submit", function (event) {
       var coordinates = result.features[0].geometry.coordinates;
       console.log(coordinates);
 
-      // create google maps marker with pinTitle and coordinates
-      var marker = new google.maps.Marker({
-        position: { lat: coordinates[1], lng: coordinates[0] },
-        map: map,
-        title: pinTitle,
-      });
-      // push marker to markers array
-      markers.push({
-        title: pinTitle,
-        position: { lat: coordinates[1], lng: coordinates[0] },
-        image: pinImage,
-      });
-
-      console.log(markers);
-
       //created marker div
       // loop through markers array and create new div for newest marker
       const newestMarkerIndex = markers.length - 1;
@@ -91,11 +76,11 @@ pinForm.addEventListener("submit", function (event) {
 
       // create new h3 element for newest marker title
       const markerTitle = document.createElement("h3");
-      markerTitle.textContent = newestMarker.title;
+      markerTitle.textContent = pinTitle;
 
       // create new p element for newest marker location
       const markerLocation = document.createElement("p");
-      markerLocation.textContent = `Lat: ${newestMarker.position.lat}, Lng: ${newestMarker.position.lng}`;
+      markerLocation.textContent = `Lat: ${coordinates[1]}, Lng: ${coordinates[0]}`;
 
       // create new img element for newest marker image
 
@@ -125,7 +110,26 @@ pinForm.addEventListener("submit", function (event) {
 
           // append newest marker div to createdPins div
           createdPins.appendChild(createdMarkerdiv);
+
+          // create google maps marker with pinTitle and coordinates
+          var marker = new google.maps.Marker({
+            position: { lat: coordinates[1], lng: coordinates[0] },
+            map: map,
+            title: pinTitle,
+            icon: {
+              url: markerImage.src,
+              scaledSize: new google.maps.Size(50, 50), 
+            }
+          });
+          // push marker to markers array
+          markers.push({
+            title: pinTitle,
+            position: { lat: coordinates[1], lng: coordinates[0] },
+            image: markerImage,
+          });
         });
+
+      console.log(markers);
     })
     .catch((error) => console.log("error", error));
 
