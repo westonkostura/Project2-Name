@@ -65,6 +65,29 @@ app.post('/upload', upload.single('file'), (req, res) => {
 //   res.sendFile(path.join(__dirname, "uploads", filename));
 // });
 
+//get route for uploads
+app.get("/uploads", (req, res) => {
+  const directoryPath = path.join(__dirname, "public", "uploads");
+
+  fs.readdir(directoryPath, (err, files) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error reading directory");
+    } else {
+      const fileData = files.map((file) => {
+        const filePath = path.join(directoryPath, file);
+        const stats = fs.statSync(filePath);
+
+        return {
+          filename: file,
+          created: stats.ctime,
+        };
+      });
+
+      res.json({ files: fileData });
+    }
+  });
+});
 
 app.use("/uploads", express.static("uploads"));
 

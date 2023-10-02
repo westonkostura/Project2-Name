@@ -17,26 +17,26 @@ let map;
 let markers = [];
 
 // add event listener for pictureUplaod
-pictureUpload.addEventListener('submit', function(event) {
+pictureUpload.addEventListener("submit", function (event) {
   event.preventDefault(); // prevent default form submission behavior
 
   const formData = new FormData(pictureUpload);
 
-  fetch('/upload', {
-    method: 'POST',
-    body: formData
+  fetch("/upload", {
+    method: "POST",
+    body: formData,
   })
-    .then(response => {
+    .then((response) => {
       if (response.ok) {
-        alert('File uploaded successfully')
-        } else {
-        alert('File upload failed')
-        };
-      console.log('File uploaded successfully');
+        alert("File uploaded successfully");
+      } else {
+        alert("File upload failed");
+      }
+      console.log("File uploaded successfully");
       console.log(response);
     })
-    .catch(error => {
-      console.error('Error uploading file:', error);
+    .catch((error) => {
+      console.error("Error uploading file:", error);
       // handle the error
     });
 });
@@ -86,6 +86,7 @@ pinForm.addEventListener("submit", function (event) {
 
       // create new div element for newest marker
       const createdMarkerdiv = document.createElement("div");
+      createdMarkerdiv.style.border = "1px solid black";
       createdMarkerdiv.classList.add("marker");
 
       // create new h3 element for newest marker title
@@ -100,15 +101,31 @@ pinForm.addEventListener("submit", function (event) {
 
       //**** this does not work current, keeps bringing null image */
       const markerImage = document.createElement("img");
-      markerImage.src = newestMarker.image;
+      markerImage.style.width = "100%";
+      markerImage.style.height = "100px";
+      // fetch list of files in uploads directory
+      fetch("/uploads")
+        .then((response) => response.json())
+        .then((data) => {
+          // sort files by creation time
+          data.files.sort((a, b) => {
+            return new Date(b.created) - new Date(a.created);
+          });
 
-      // append title, location, and image to newest marker div
-      createdMarkerdiv.appendChild(markerTitle);
-      createdMarkerdiv.appendChild(markerLocation);
-      createdMarkerdiv.appendChild(markerImage);
+          // get filename of newest file
+          const newestFile = data.files[0].filename;
 
-      // append newest marker div to createdPins div
-      createdPins.appendChild(createdMarkerdiv);
+          // set src attribute of markerImage element to URL of newest file
+          markerImage.src = `/uploads/${newestFile}`;
+
+          // append title, location, and image to newest marker div
+          createdMarkerdiv.appendChild(markerTitle);
+          createdMarkerdiv.appendChild(markerLocation);
+          createdMarkerdiv.appendChild(markerImage);
+
+          // append newest marker div to createdPins div
+          createdPins.appendChild(createdMarkerdiv);
+        });
     })
     .catch((error) => console.log("error", error));
 
@@ -130,8 +147,6 @@ saveButton.addEventListener("click", function () {
     });
   });
   console.log(markerData);
-
-
 });
 // add event listener to myMap
 myMap.addEventListener("click", function () {
@@ -165,8 +180,6 @@ async function initMap() {
     streetViewControl: false,
     fullscreenControl: false,
   });
-
-
 
   //function to add markers on button click
   function addExampleMarkers() {
