@@ -46,7 +46,7 @@ console.log(Date.now());
 //multer middleware for uploading pictures
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/");
+    cb(null, "public/uploads/");
   },
   filename: function (req, file, cb) {
    cb(null, formattedDate + '-' + file.originalname);
@@ -54,15 +54,16 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ storage: storage });
 
-app.post("/uploads", upload.single("image"), function (req, res) {
-console.log(req.file);
+app.post('/upload', upload.single('file'), (req, res) => {
+  // console.log(req.file);
+  res.send('Single file upload success');
 });
 
 // GET route with dynamic route parameter
-app.get("/image/:filename", (req, res) => {
-  const filename = req.params.filename;
-  res.sendFile(path.join(__dirname, "uploads", filename));
-});
+// app.get("/upload/:filename", (req, res) => {
+//   const filename = req.params.filename;
+//   res.sendFile(path.join(__dirname, "uploads", filename));
+// });
 
 
 app.use("/uploads", express.static("uploads"));
