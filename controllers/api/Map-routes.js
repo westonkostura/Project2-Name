@@ -16,4 +16,21 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Create a new map
+router.post('/maps', async (req, res) => {
+  const { mapname, markerdata } = req.body;
+
+  try {
+    const newMap = await Map.create({
+      mapname: mapname,
+      markerdata: markerdata,
+    });
+
+    res.json(newMap);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Error saving map to database');
+  }
+});
+
 module.exports = router;
