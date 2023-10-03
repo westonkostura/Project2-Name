@@ -26,6 +26,7 @@ console.log(formattedDate);
 
 
 const sequelize = require("./config/connection");
+const { Marker } = require("./models");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 const app = express();
@@ -89,6 +90,36 @@ app.get("/uploads", (req, res) => {
   });
 });
 
+
+// app.post('/api/markers', async (req, res) => {
+
+//   try {
+//     const newMarker = await Marker.create({
+//       ...req.body,
+//       user_id: req.session.user_id,
+//     });
+//     res.status(200).json(newMarker);
+//   } catch (err) {
+//     res.status(400).json(err);
+//   }
+//   });
+
+// app.post('/api/markers', async (req, res) => {
+//   try {
+//     console.log('it works!');   
+//     const markerData = req.body; // Assuming the client sends marker data as JSON
+//     console.log(markerData);
+//     // Create a new marker using the Sequelize model
+//     const marker = await Marker.create(markerData);
+    
+
+//     res.status(201).json({ message: 'Marker data saved successfully', marker });
+//   } catch (err) {
+//     console.error('Error saving marker data:', err);
+//     res.status(500).json({ error: 'Internal server error' });
+//   }
+// });
+
 app.use("/uploads", express.static("uploads"));
 
 app.use(session(sess));
@@ -101,6 +132,24 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(routes);
+
+app.post('/api/markers', async (req, res) => {
+  try {
+    const markerData = req.body; // Assuming the client sends marker data as JSON
+    console.log(markerData);
+    // Create a new marker using the Sequelize model
+    const marker = await Marker.create(markerData);
+
+    res.status(201).json({ message: 'Marker data saved successfully', marker });
+  } catch (err) {
+    console.error('Error saving marker data:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.use(routes);
+
+
 
 sequelize.sync({ force: true }).then(() => {
   app.listen(PORT, () => console.log("Now listening"));

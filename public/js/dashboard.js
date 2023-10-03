@@ -137,93 +137,170 @@ pinForm.addEventListener("submit", function (event) {
   pinForm.reset();
 });
 
-
-
-
-//initial map function
-async function initMap() {
-  const { Map } = await google.maps.importLibrary("maps");
-
-  map = new Map(document.getElementById("map"), {
-    center: { lat: 34.397, lng: -111.644 },
-    zoom: 6,
-    mapTypeControl: false,
-    streetViewControl: false,
-    fullscreenControl: false,
-  });
-
-
-  //listener for addExampleMarkers function
-  MyMap.addEventListener("click", function () {
-    addExampleMarkers();
-  });
-
-  // add event listener to saveButton
+// add event listener to saveButton
 saveButton.addEventListener("click", function () {
-// Prompt the user for a map name
-const mapName = window.prompt("Enter a name for the map:");
-
-// Create a button with the map name and markers
-const mapButton = document.createElement("button");
-mapButton.textContent = mapName + " (" + markers.length + " markers)";
-createdMapsDiv.appendChild(mapButton);
-
-// Add a click event listener to the map button
-mapButton.addEventListener("click", function () {
-  // Loop through the markers array and add markers to the map
-  markers.forEach((marker) => {
-    new google.maps.Marker({
-      position: marker.position,
-      map: map,
-      title: marker.title,
-      icon: {
-        url: marker.image,
-        scaledSize: new google.maps.Size(50, 50),
-      },
-    });
-  });
-
-  // Clear the markers array and remove all markers from the map
-  markers = [];
-  mapMarkers.forEach((marker) => {
-    marker.setMap(null);
-  });
-  mapMarkers = [];
-});
-
-  // Create an array of marker data objects
+  // create new array to store marker data
   const markerData = [];
-  const createdMarkerDivs = document.querySelectorAll(".marker");
-  createdMarkerDivs.forEach((createdMarkerDiv) => {
-    const markerTitle = createdMarkerDiv.querySelector(".markerTitle").textContent;
-    const markerLocation = createdMarkerDiv.querySelector(".markerLocation").textContent;
-    const markerImage = createdMarkerDiv.querySelector(".markerImage").src;
+  var mapName = window.prompt("Please enter a name for your map");
+
+  // loop through markers array and push title and position to markerData array
+  markers.forEach((markers) => {
     markerData.push({
-      title: markerTitle,
-      location: markerLocation,
-      image: markerImage,
+      title: markers.title,
+      position: markers.position,
+      image: markers.image,
     });
   });
-
-  // Save the map name and marker data to the database
-  fetch("/api/maps", {
+  console.log('big marker', markerData);
+  console.log(JSON.stringify(markerData));
+  fetch('/api/markers', {
     method: "POST",
-    body: JSON.stringify({
-      mapname: mapName,
-      markerdata: markerData,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(markerData),
   })
-    .then((response) => response.json())
-    .then((data) => console.log(data))
-    .catch((err) => console.log(err));
+  
+  .then((response) => response.json())
+  .then((markerData) => {
+    console.log("Success in posting marker data:", markerData);
+  })
+  .catch((error) => {
+    console.error("Error posting marker data:", error);
+  });
+
+
+  myMap.addEventListener("click", function () {
+    // call the function to render data
+    getMarkerData();
+  });
+
+  // function to get marker data from server
+  async function getMarkerData() {
+    const response = await fetch("/api/markers");
+    const data = await response.json();
+    return data;
+  };
 });
+
+// // add event listener to saveButton
+// saveButton.addEventListener("click", function () {
+//   // create new array to store marker data
+//   const markerData = [];
+
+//   // loop through markers array and push title and position to markerData array
+//   markers.forEach((marker) => {
+//     markerData.push({
+//       title: marker.title,
+//       position: marker.position,
+//       image: marker.image,
+//     });
+//   });
+//   console.log(markerData);
+// });
+// // add event listener to myMap
+// myMap.addEventListener("click", function () {
+//   // call the function to render data
+//   renderData();
+// });
+
+// // function to render data
+// function renderData() {
+//   // still not working, need to figure out how to get the image to render
+//   markerData.forEach((markerData, i) => {
+//     new google.maps.Marker({
+//       position: markerData.position,
+//       map: map,
+//       icon: {
+//         url: images[i],
+//         scaledSize: new google.maps.Size(50, 50),
+//       },
+//     });
+//   });
+// }
+
+// //initial map function
+// async function initMap() {
+//   const { Map } = await google.maps.importLibrary("maps");
+
+//   map = new Map(document.getElementById("map"), {
+//     center: { lat: 34.397, lng: -111.644 },
+//     zoom: 6,
+//     mapTypeControl: false,
+//     streetViewControl: false,
+//     fullscreenControl: false,
+//   });
+
+
+//   //listener for addExampleMarkers function
+//   MyMap.addEventListener("click", function () {
+//     addExampleMarkers();
+//   });
+
+//   // add event listener to saveButton
+// saveButton.addEventListener("click", function () {
+// // Prompt the user for a map name
+// const mapName = window.prompt("Enter a name for the map:");
+
+// // Create a button with the map name and markers
+// const mapButton = document.createElement("button");
+// mapButton.textContent = mapName + " (" + markers.length + " markers)";
+// createdMapsDiv.appendChild(mapButton);
+
+// // Add a click event listener to the map button
+// mapButton.addEventListener("click", function () {
+//   // Loop through the markers array and add markers to the map
+//   markers.forEach((marker) => {
+//     new google.maps.Marker({
+//       position: marker.position,
+//       map: map,
+//       title: marker.title,
+//       icon: {
+//         url: marker.image,
+//         scaledSize: new google.maps.Size(50, 50),
+//       },
+//     });
+//   });
+
+//   // Clear the markers array and remove all markers from the map
+//   markers = [];
+//   mapMarkers.forEach((marker) => {
+//     marker.setMap(null);
+//   });
+//   mapMarkers = [];
+// });
+
+//   // Create an array of marker data objects
+//   const markerData = [];
+//   const createdMarkerDivs = document.querySelectorAll(".marker");
+//   createdMarkerDivs.forEach((createdMarkerDiv) => {
+//     const markerTitle = createdMarkerDiv.querySelector(".markerTitle").textContent;
+//     const markerLocation = createdMarkerDiv.querySelector(".markerLocation").textContent;
+//     const markerImage = createdMarkerDiv.querySelector(".markerImage").src;
+//     markerData.push({
+//       title: markerTitle,
+//       location: markerLocation,
+//       image: markerImage,
+//     });
+//   });
+
+//   // Save the map name and marker data to the database
+//   fetch("/api/maps", {
+//     method: "POST",
+//     body: JSON.stringify({
+//       mapname: mapName,
+//       markerdata: markerData,
+//     }),
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   })
+//     .then((response) => response.json())
+//     .then((data) => console.log(data))
+//     .catch((err) => console.log(err));
+// });
 
 
   //end initMap function
-}
+// }
 
 //refresh button
 refresh.addEventListener("click", function () {
