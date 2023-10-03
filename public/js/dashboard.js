@@ -217,18 +217,18 @@ saveButton.addEventListener("click", function () {
 //   });
 // }
 
-// //initial map function
-// async function initMap() {
-//   const { Map } = await google.maps.importLibrary("maps");
+//initial map function
+async function initMap() {
+  const { Map } = await google.maps.importLibrary("maps");
 
-//   map = new Map(document.getElementById("map"), {
-//     center: { lat: 34.397, lng: -111.644 },
-//     zoom: 6,
-//     mapTypeControl: false,
-//     streetViewControl: false,
-//     fullscreenControl: false,
-//   });
-
+  map = new Map(document.getElementById("map"), {
+    center: { lat: 34.397, lng: -111.644 },
+    zoom: 6,
+    mapTypeControl: false,
+    streetViewControl: false,
+    fullscreenControl: false,
+  });
+};
 
 //   //listener for addExampleMarkers function
 //   MyMap.addEventListener("click", function () {
