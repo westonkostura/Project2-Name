@@ -104,21 +104,7 @@ app.get("/uploads", (req, res) => {
 //   }
 //   });
 
-// app.post('/api/markers', async (req, res) => {
-//   try {
-//     console.log('it works!');   
-//     const markerData = req.body; // Assuming the client sends marker data as JSON
-//     console.log(markerData);
-//     // Create a new marker using the Sequelize model
-//     const marker = await Marker.create(markerData);
-    
 
-//     res.status(201).json({ message: 'Marker data saved successfully', marker });
-//   } catch (err) {
-//     console.error('Error saving marker data:', err);
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// });
 
 app.use("/uploads", express.static("uploads"));
 
@@ -131,10 +117,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(routes);
-
 app.post('/api/markers', async (req, res) => {
   try {
+    console.log('it works!');   
     const markerData = req.body; // Assuming the client sends marker data as JSON
     console.log(markerData);
     // Create a new marker using the Sequelize model
