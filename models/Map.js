@@ -8,17 +8,17 @@ Map.init(
     {
         id: {
             type: DataTypes.INTEGER,
-            allowNUll: false,
+            allowNull: false,
             primaryKey: true,
             autoIncrement: true,
         },
         map_name: {
             type: DataTypes.STRING,
-            allowNUll: false,
+            allowNull: false,
         },
         marker_id: {
             type: DataTypes.INTEGER,
-            allowNUll: false,
+            allowNull: false,
             references: {
                 model: 'marker',
                 key: 'id',

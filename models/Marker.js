@@ -9,26 +9,26 @@ Marker.init(
     {
         id: {
             type: DataTypes.INTEGER,
-            allowNUll: false,
+            allowNull: false,
             primaryKey: true,
             autoIncrement: true,
         },
         content: {
             type: DataTypes.STRING,
-            allowNUll: false,
+            allowNull: true,
         },
         image: {
             type: DataTypes.STRING,
-            allowNUll: false,
+            allowNull: true,
             
         },
         location: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         user_id: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
             references: {
                 model: 'user',
                 key: 'id',

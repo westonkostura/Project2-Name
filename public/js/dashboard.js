@@ -141,37 +141,87 @@ pinForm.addEventListener("submit", function (event) {
 saveButton.addEventListener("click", function () {
   // create new array to store marker data
   const markerData = [];
+  var mapName = window.prompt("Please enter a name for your map");
 
   // loop through markers array and push title and position to markerData array
-  markers.forEach((marker) => {
+  markers.forEach((markers) => {
     markerData.push({
-      title: marker.title,
-      position: marker.position,
-      image: marker.image,
+      title: markers.title,
+      position: markers.position,
+      image: markers.image,
     });
   });
-  console.log(markerData);
-});
+  console.log('big marker', markerData);
+  console.log(JSON.stringify(markerData));
+  fetch('/api/markers', {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(markerData),
+  })
+  
+  .then((response) => response.json())
+  .then((markerData) => {
+    console.log("Success in posting marker data:", markerData);
+  })
+  .catch((error) => {
+    console.error("Error posting marker data:", error);
+  });
+  // make POST request to server to save marker data
+  // async function saveMarkerData(markerData) {
+  //   const response = await fetch("/api/markers", {
+  //     method: "POST",
+  //     body: JSON.stringify(markerData),
+  //     headers: { "Content-Type": "application/json" },
+  //   });
+  //   console.log(response);
+  //   if (response.ok) {
+  //     document.location.replace("/dashboard");
+  //   } else {
+  //     alert(response.statusText);
+  //   }
+  // }
+  // saveMarkerData(markerData);
+
+  myMap.addEventListener("click", function () {
+    // call the function to render data
+    getMarkerData();
+  });
+
+  // function to get marker data from server
+  async function getMarkerData() {
+    const response = await fetch("/api/markers");
+    const data = await response.json();
+    return data;
+  }
+    // still not working, need to figure out how to get the image to render
+  //   markerData.forEach((markerData, i) => {
+  //     new google.maps.Marker({
+  //       position: markerData.position,
+  //       map: map,
+  //       image: markerData.image,
+  //       title: markerData.title,
+  //     });
+  //   });
+  // }
+ });
 // add event listener to myMap
-myMap.addEventListener("click", function () {
-  // call the function to render data
-  renderData();
-});
+// myMap.addEventListener("click", function () {
+//   // call the function to render data
+//   renderData();
+// });
 
 // function to render data
-function renderData() {
-  // still not working, need to figure out how to get the image to render
-  markerData.forEach((markerData, i) => {
-    new google.maps.Marker({
-      position: markerData.position,
-      map: map,
-      icon: {
-        url: images[i],
-        scaledSize: new google.maps.Size(50, 50),
-      },
-    });
-  });
-}
+// function renderData() {
+//   // still not working, need to figure out how to get the image to render
+//   markerData.forEach((markerData, i) => {
+//     new google.maps.Marker({
+//       position: markerData.position,
+//       map: map,
+//       image: markerData.image,
+//        title: markerData.title,
+//     });
+//   });
+// }
 
 //initial map function
 async function initMap() {

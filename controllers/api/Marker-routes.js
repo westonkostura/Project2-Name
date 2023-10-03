@@ -20,6 +20,21 @@ router.get('/', withAuth, async (req, res) => {
   }
 });
 
+router.post('/api/markers', async (req, res) => {
+  try {
+    const newMarker = await Marker.create({
+      title: title,
+      position: position,
+      image: image,
+      userid: req.session.user_id,
+    });
+
+    res.status(200).json(newMarker);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 router.get('/login', (req, res) => {
   if (req.session.logged_in) {
     res.redirect('/');
